@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cypress-ingresses
+spec:
+  rules:
+    - host: director-domain.com
+      http:
+        paths:
+          - path: /
+          - path: /director
+            pathType: Prefix
+            backend:
+              service:
+                name: director-service
+                port:
+                  number: 1234

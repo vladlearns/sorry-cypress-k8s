@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+      name: dashboard
+    spec:
+      containers:
+        - env:
+            - name: GRAPHQL_SCHEMA_URL
+              value: '/api'
+            - name: PORT
+              value: '8080'
+            - name: CI_URL
+              value: ''
+          image: agoldis/sorry-cypress-dashboard:latest
+          imagePullPolicy: 'Always'
+          name: dashboard
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 2
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: '128M'
+              cpu: 0.2
+            limits:
+              memory: '512M'
+              cpu: 0.5
+      restartPolicy: Always
+      serviceAccountName: ''
+      volumes: null

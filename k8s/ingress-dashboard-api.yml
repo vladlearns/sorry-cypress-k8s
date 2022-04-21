@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cypress-ingresses
+spec:
+  rules:
+    - host: dashboard-domain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dashboard-service
+                port:
+                  number: 8080
+          - path: /api
+            pathType: Exact
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 4000
